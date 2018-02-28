@@ -28,5 +28,8 @@ app.use('/', user);
 const index = require('./router/index');
 app.use('/', index);
 
+const chat = require('./router/chat');
+app.use('/', chat);
+
 app.listen(4000);
 console.log('服务器启动，端口：4000');
