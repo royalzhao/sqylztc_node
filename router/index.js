@@ -12,7 +12,7 @@ const router = express.Router();
 
 
 router.route('/getDoctorInfo').post(function (req, res) {
-    
+   // console.log(req.body)
     let sql;
     sql =  `select * from doctor where d_tel = ?`;
     
