@@ -159,14 +159,14 @@ CREATE TABLE `patientgroup` (
   `fromLoginUser` varchar(20) DEFAULT NULL,
   `sex` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 /*Data for the table `patientgroup` */
 
 insert  into `patientgroup`(`id`,`age`,`height`,`weight`,`profession`,`history`,`name`,`fromLoginUser`,`sex`) values 
-(5,23,'175cm','101kg','IT程序员','胃病','张三','17611580721','男'),
-(6,23,'175','404','去去去',' 凄凄切切','李四','17611580721','男'),
-(9,23,'787','8564','45','13','张三','17611580721','女');
+(5,23,'175cm','101kg','IT程序员','胃病','张三','17611580721','1'),
+(23,12,'170cm','120kg','患者','脑梗塞','李四','17611580721','0'),
+(24,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `record` */
 
@@ -174,30 +174,50 @@ DROP TABLE IF EXISTS `record`;
 
 CREATE TABLE `record` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `record_group_id` int(10) DEFAULT NULL COMMENT '群组id',
+  `record_group_id` varchar(50) DEFAULT NULL COMMENT '群组id',
   `content` text DEFAULT NULL,
-  `time` varchar(20) DEFAULT NULL,
-  `receiver` varchar(20) DEFAULT NULL,
-  `send` varchar(20) DEFAULT NULL,
-  `state` varchar(10) DEFAULT NULL,
+  `time` varchar(30) DEFAULT NULL,
+  `receiver` varchar(50) DEFAULT NULL,
+  `send` varchar(50) DEFAULT NULL,
+  `state` varchar(10) DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 /*Data for the table `record` */
+
+insert  into `record`(`id`,`record_group_id`,`content`,`time`,`receiver`,`send`,`state`) values 
+(1,'1519884680877','789','2018-03-01 10:44:41','zhansan19950721','17611580721','false'),
+(2,'1519884680877','789789789789879','2018-03-01 14:16:07','zhansan19950721','17611580721','false'),
+(3,'1519884680877','123','2018-03-01 14:21:46','zhansan19950721','17611580721','false'),
+(4,'1519884680877','2134456789','2018-03-01 14:22:55','zhansan19950721','17611580721','false'),
+(5,'1519884680877','tyyyyyyyyytrtyry','2018-03-01 14:23:34','zhansan19950721','17611580721','false'),
+(6,'1519955215665','123','2018-03-02 09:47:29','zhansan19950721','17611580721','false'),
+(7,'1519955215665','qwe','2018-03-02 10:52:14','zhansan19950721','17611580721','false');
 
 /*Table structure for table `record_group` */
 
 DROP TABLE IF EXISTS `record_group`;
 
 CREATE TABLE `record_group` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `d_id` int(10) DEFAULT NULL COMMENT '医生id',
-  `p_id` int(10) DEFAULT NULL COMMENT '患者id',
-  `time` varchar(20) DEFAULT NULL,
+  `id` varchar(50) NOT NULL,
+  `d_id` varchar(50) DEFAULT NULL COMMENT '医生id',
+  `p_id` varchar(50) DEFAULT NULL COMMENT '患者id',
+  `time` varchar(50) DEFAULT NULL,
+  `chatState` varchar(10) DEFAULT NULL,
+  `chatPerson` varchar(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `record_group` */
+
+insert  into `record_group`(`id`,`d_id`,`p_id`,`time`,`chatState`,`chatPerson`) values 
+('1','zhansan19950721','17611580721','2018-03-01 10:48:46','0','23'),
+('1519883777640','17611580721','zhansan19950721','2018-03-01 10:44:41','23','0'),
+('1519884258323','zhansan19950721','17611580721','2018-03-01 14:04:18','1','5'),
+('1519884341561','zhansan19950721','17611580721','2018-03-01 14:05:41','1','5'),
+('1519884680877','zhansan19950721','17611580721','2018-03-01 14:11:20','1','23'),
+('1519955215665','zhansan19950721','17611580721','2018-03-02 09:46:55','1','5'),
+('2','zhansan19950721','17611580721','2018-03-01 10:50:55','1','5');
 
 /*Table structure for table `toutiao` */
 
