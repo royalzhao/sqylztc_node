@@ -103,7 +103,6 @@ insert  into `common_phone`(`id`,`title`,`phone`) values
 DROP TABLE IF EXISTS `doctor`;
 
 CREATE TABLE `doctor` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
   `d_name` varchar(10) DEFAULT NULL,
   `d_technicalTitle` varchar(10) DEFAULT NULL,
   `d_committee` varchar(10) DEFAULT NULL,
@@ -112,16 +111,39 @@ CREATE TABLE `doctor` (
   `d_abstract` text DEFAULT NULL,
   `d_password` varchar(20) DEFAULT NULL,
   `d_face` text DEFAULT NULL,
-  `d_id` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `d_id` varchar(50) NOT NULL,
+  PRIMARY KEY (`d_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `doctor` */
 
-insert  into `doctor`(`id`,`d_name`,`d_technicalTitle`,`d_committee`,`d_tel`,`d_patientNum`,`d_abstract`,`d_password`,`d_face`,`d_id`) values 
-(1,'张三','全科医生','五湖居委','17611580721',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。','123456','../../../static/img/doctor.jpg','zhansan19950721'),
-(3,'李四','牙科医生','六洲居委','15776573881',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg','wangwu19950721'),
-(4,'王五','皮肤科医生','朝阳居委','13889898937',878,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg','lisi19950721');
+insert  into `doctor`(`d_name`,`d_technicalTitle`,`d_committee`,`d_tel`,`d_patientNum`,`d_abstract`,`d_password`,`d_face`,`d_id`) values 
+('王五','皮肤科医生','朝阳居委','13889898937',878,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg','lisi19950721'),
+('李四','牙科医生','六洲居委','15776573881',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg','wangwu19950721'),
+('张三','全科医生','五湖居委','17611580721',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。','123456','../../../static/img/doctor.jpg','zhansan19950721');
+
+/*Table structure for table `order` */
+
+DROP TABLE IF EXISTS `order`;
+
+CREATE TABLE `order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `d_id` varchar(50) DEFAULT NULL,
+  `order_name` varchar(20) DEFAULT NULL,
+  `order_phone` varchar(20) DEFAULT NULL,
+  `order_address` varchar(50) DEFAULT NULL,
+  `order_time` varchar(50) DEFAULT NULL,
+  `order_situation` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+/*Data for the table `order` */
+
+insert  into `order`(`id`,`d_id`,`order_name`,`order_phone`,`order_address`,`order_time`,`order_situation`) values 
+(1,'d_id','order_name','order_phone','order_address','order_time','order_situation'),
+(2,'zhansan19950721','张三','17978788787','朝阳小区2单元一楼','2018-03-27 11:59:34','true'),
+(3,'zhansan19950721','张三','17978788787','朝阳小区2单元一楼','2018-03-27 11:59:34','true'),
+(4,'zhansan19950721','lisi','17611580721','adasdas','2018-03-13 13:30:51','true');
 
 /*Table structure for table `patient` */
 
@@ -181,7 +203,7 @@ CREATE TABLE `record` (
   `send` varchar(50) DEFAULT NULL,
   `state` varchar(10) DEFAULT 'false',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `record` */
 
@@ -192,7 +214,9 @@ insert  into `record`(`id`,`record_group_id`,`content`,`time`,`receiver`,`send`,
 (4,'1519884680877','2134456789','2018-03-01 14:22:55','zhansan19950721','17611580721','false'),
 (5,'1519884680877','tyyyyyyyyytrtyry','2018-03-01 14:23:34','zhansan19950721','17611580721','false'),
 (6,'1519955215665','123','2018-03-02 09:47:29','zhansan19950721','17611580721','false'),
-(7,'1519955215665','qwe','2018-03-02 10:52:14','zhansan19950721','17611580721','false');
+(7,'1519955215665','qwe','2018-03-02 10:52:14','zhansan19950721','17611580721','false'),
+(8,'1520212097421','111','2018-03-05 09:09:16','zhansan19950721','17611580721','false'),
+(9,'1520229967469','123','2018-03-05 14:07:05','zhansan19950721','17611580721','false');
 
 /*Table structure for table `record_group` */
 
@@ -217,6 +241,9 @@ insert  into `record_group`(`id`,`d_id`,`p_id`,`time`,`chatState`,`chatPerson`) 
 ('1519884341561','zhansan19950721','17611580721','2018-03-01 14:05:41','1','5'),
 ('1519884680877','zhansan19950721','17611580721','2018-03-01 14:11:20','1','23'),
 ('1519955215665','zhansan19950721','17611580721','2018-03-02 09:46:55','1','5'),
+('1520212097421','zhansan19950721','17611580721','2018-03-05 09:08:17','1','5'),
+('1520229967469','zhansan19950721','17611580721','2018-03-05 14:06:07','1','5'),
+('1520230039303','zhansan19950721','17611580721','2018-03-05 14:07:19','1','5'),
 ('2','zhansan19950721','17611580721','2018-03-01 10:50:55','1','5');
 
 /*Table structure for table `toutiao` */
