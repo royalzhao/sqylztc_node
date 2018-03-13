@@ -12,9 +12,16 @@ const router = express.Router();
 
 
 router.route('/getDoctorInfo').post(function (req, res) {
-   // console.log(req.body)
+   //console.log(req.body)
     let sql;
-    sql =  `select * from doctor where d_tel = ?`;
+    if(req.body.userType == '2'){
+        sql =  `select * from doctor where d_tel=?`;
+        //console.log(1)
+    }else{
+        sql =  `SELECT * FROM doctor  JOIN patient ON doctor.p_houseNum=patient.p_houseNum  WHERE p_tel=?`;
+        //console.log(2)
+    }
+    
     
     param = [req.body.username];
     mysql.pool.getConnection(function (error, connection) {
@@ -39,6 +46,7 @@ router.route('/getDoctorInfo').post(function (req, res) {
     
 })
 router.route('/getFamilyInfo').post(function (req, res) {
+    console.log(req.body)
     let sql;
     sql =  `select id,name from patientgroup where fromLoginUser = ?`;
     
@@ -57,6 +65,7 @@ router.route('/getFamilyInfo').post(function (req, res) {
             res.send({message: 'ERROR'});
             return
         }else{
+            console.log(data)
             res.send(data);
         }
         
@@ -92,7 +101,14 @@ router.route('/getFamilyDetail').post(function (req, res) {
 })
 router.route('/getUserInfo').post(function (req, res) {
     let sql;
-    sql =  `select * from patient where p_tel = ?`;
+    if(req.body.userType == '1'){
+        sql =  `select p_name name,p_tel tel,p_password password,p_face face from patient where p_tel = ?`;
+        //console.log(1)
+    }else{
+        sql =  `SELECT d_name name,d_tel tel,d_password password,d_face face FROM doctor where d_tel = ?`;
+        //console.log(2)
+    }
+    
     
     param = [req.body.username];
     mysql.pool.getConnection(function (error, connection) {
@@ -107,6 +123,34 @@ router.route('/getUserInfo').post(function (req, res) {
         connection.release()
         if (error) {
             console.log({message: 'ERROR'});
+            return
+        }else{
+            res.send(data);
+        }
+        
+        })
+    })
+    
+})
+router.route('/search').post(function (req, res) {
+    //console.log(req.body)
+    let sql;
+    sql =  `SELECT * FROM toutiao WHERE title OR abstract LIKE "%"?"%" UNION SELECT * FROM zhishi WHERE title OR abstract LIKE "%"?"%" `;
+    
+    param = [req.body.searchValue,req.body.searchValue];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log({message: 'ERROR'});
+            res.send({message: 'ERROR'});
             return
         }else{
             res.send(data);
@@ -143,7 +187,7 @@ router.route('/insertPerson').post(function (req, res) {
     
 })
 router.route('/delPerson').post(function (req, res) {
-    console.log(req.body)
+    //console.log(req.body)
     let sql =  `delete from patientgroup where id = ?`;
     
     param = [req.body.id];
@@ -201,6 +245,83 @@ router.route('/delAllPerson').post(function (req, res) {
     })
     
 })
+router.route('/delAllChat').post(function (req, res) {
+    //console.log(req.body.ids)
+    var sql = `delete from patientgroup where p_id = ? `;
+    param = [req.body.username];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send({message: 'OK'});
+        }
+        
+        })
+    })
+    
+})
+router.route('/getAllChatNum').post(function (req, res) {
+    //console.log(req.body.ids)
+    var sql = `SELECT SUM(count) count FROM ( SELECT COUNT(1) count FROM record WHERE receiver =? UNION ALL SELECT COUNT(1) count FROM record WHERE send  =? ) a `;
+    param = [req.body.username,req.body.username];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send(data);
+        }
+        
+        })
+    })
+    
+})
+router.route('/getAllOrder').post(function (req, res) {
+    console.log(req.body)
+    var sql = `SELECT * FROM sq_order WHERE d_id = ?`;
+    param = [req.body.username];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log('ERROR')
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            console.log(data)
+            res.send(data);
+        }
+        
+        })
+    })
+    
+})
 router.route('/updateFamilyDetail').post(function (req, res) {
     let sql =  `update patientgroup set name=?,age=?,height=?,weight=?,history=?,sex=?,profession=? where id=?`;
     
@@ -216,6 +337,96 @@ router.route('/updateFamilyDetail').post(function (req, res) {
         }, function (error, data) {
         connection.release()
         if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send({message: 'OK'});
+        }
+        
+        })
+    })
+})
+router.route('/updateFace').post(function (req, res) {
+    //console.log(req.body)
+    
+    let sql;
+    if(req.body.userType == '1'){
+        sql =  `update patient set p_face=? where p_tel=?`;
+        //console.log(1)
+    }else{
+        sql =  `update doctor set d_face=? where d_tel=?`;
+        //console.log(2)
+    }
+    
+    param = [req.body.face,req.body.phone];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send({message: 'OK'});
+        }
+        
+        })
+    })
+})
+router.route('/updatePassword').post(function (req, res) {
+    //console.log(req.body)
+    let sql;
+    if(req.body.userType == '1'){
+        sql =  `update patient set p_password=? where p_tel=?`;
+        //console.log(1)
+    }else{
+        sql =  `update doctor set d_password=? where d_tel=?`;
+        //console.log(2)
+    }
+    param = [req.body.password,req.body.phone];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send({message: 'OK'});
+        }
+        
+        })
+    })
+})
+router.route('/complateOrder').post(function (req, res) {
+    //console.log(req.body)
+    let sql =  `update sq_order set order_state='true' where id=?`;
+    
+    param = [req.body.id];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log('ERROR')
             res.send({message: 'ERROR'});
             return
         }else{

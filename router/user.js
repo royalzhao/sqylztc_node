@@ -47,9 +47,11 @@ router.route('/register').post(function (req, res) {
 router.route('/login').post(function (req, res) {
     let sql;
     if(req.body.loginState == 1){
-        sql =  `select * from patient where p_tel = ? and p_password = ?`;
+        sql =  `select p_name,p_tel,p_face face from patient where p_tel = ? and p_password = ?`;
+        console.log(1)
     }else{
-        sql =  `select * from doctor where d_tel = ? and d_password = ?`;
+        sql =  `select d_name,d_tel,d_face face from doctor where d_tel = ? and d_password = ?`;
+        console.log(2)
     }
     //console.log(name)
     param = [req.body.p_tel,req.body.p_password];
@@ -67,7 +69,13 @@ router.route('/login').post(function (req, res) {
             res.send({message: 'ERROR'});
             return
         }else{
-            res.send({message: 'OK'});
+            if(data.length>0){
+                res.send(data);
+            }else{
+                res.send({message: 'ERROR'});
+            }
+            console.log(data)
+            
         }
         
         })

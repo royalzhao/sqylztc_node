@@ -103,6 +103,7 @@ insert  into `common_phone`(`id`,`title`,`phone`) values
 DROP TABLE IF EXISTS `doctor`;
 
 CREATE TABLE `doctor` (
+  `d_id` varchar(50) NOT NULL,
   `d_name` varchar(10) DEFAULT NULL,
   `d_technicalTitle` varchar(10) DEFAULT NULL,
   `d_committee` varchar(10) DEFAULT NULL,
@@ -111,39 +112,16 @@ CREATE TABLE `doctor` (
   `d_abstract` text DEFAULT NULL,
   `d_password` varchar(20) DEFAULT NULL,
   `d_face` text DEFAULT NULL,
-  `d_id` varchar(50) NOT NULL,
+  `p_houseNum` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`d_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `doctor` */
 
-insert  into `doctor`(`d_name`,`d_technicalTitle`,`d_committee`,`d_tel`,`d_patientNum`,`d_abstract`,`d_password`,`d_face`,`d_id`) values 
-('王五','皮肤科医生','朝阳居委','13889898937',878,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg','lisi19950721'),
-('李四','牙科医生','六洲居委','15776573881',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg','wangwu19950721'),
-('张三','全科医生','五湖居委','17611580721',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。','123456','../../../static/img/doctor.jpg','zhansan19950721');
-
-/*Table structure for table `order` */
-
-DROP TABLE IF EXISTS `order`;
-
-CREATE TABLE `order` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `d_id` varchar(50) DEFAULT NULL,
-  `order_name` varchar(20) DEFAULT NULL,
-  `order_phone` varchar(20) DEFAULT NULL,
-  `order_address` varchar(50) DEFAULT NULL,
-  `order_time` varchar(50) DEFAULT NULL,
-  `order_situation` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
-/*Data for the table `order` */
-
-insert  into `order`(`id`,`d_id`,`order_name`,`order_phone`,`order_address`,`order_time`,`order_situation`) values 
-(1,'d_id','order_name','order_phone','order_address','order_time','order_situation'),
-(2,'zhansan19950721','张三','17978788787','朝阳小区2单元一楼','2018-03-27 11:59:34','true'),
-(3,'zhansan19950721','张三','17978788787','朝阳小区2单元一楼','2018-03-27 11:59:34','true'),
-(4,'zhansan19950721','lisi','17611580721','adasdas','2018-03-13 13:30:51','true');
+insert  into `doctor`(`d_id`,`d_name`,`d_technicalTitle`,`d_committee`,`d_tel`,`d_patientNum`,`d_abstract`,`d_password`,`d_face`,`p_houseNum`) values 
+('lisi19950721','李四','牙科医生','六洲居委','15776573883',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','../../../static/img/doctor.jpg',NULL),
+('wangwu19950721','王五','皮肤科医生','朝阳居委','13889898937',878,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。 ','123456','http://127.0.0.1:4000/upload/1520906230833.jpg','xcfjB16'),
+('zhansan19950721','张三','全科医生','五湖居委','15776573882',787,'如果你无法简洁的表达你的想法，那只说明你还不够了解它。','123456','../../../static/img/doctor.jpg','xcfjC16');
 
 /*Table structure for table `patient` */
 
@@ -155,16 +133,18 @@ CREATE TABLE `patient` (
   `p_tel` varchar(11) DEFAULT NULL,
   `p_password` varchar(20) DEFAULT NULL,
   `p_houseNum` varchar(20) DEFAULT NULL,
-  `p_face` text DEFAULT NULL,
+  `p_face` varchar(255) DEFAULT '''../../../static/img/user2.png''',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `patient` */
 
 insert  into `patient`(`id`,`p_name`,`p_tel`,`p_password`,`p_houseNum`,`p_face`) values 
-(5,'M6-$dtvn','qweqweqwe','qweqweqwe','xcfjA610',NULL),
-(6,'v_16358471','aaa','asadasdad','xcfjB16',NULL),
-(7,'v_22693476','17611580721','132456','xcfjC16',NULL);
+(5,'M6-$dtvn','qweqweqwe','qweqweqwe','xcfjA610','../../../static/img/user2.png'),
+(6,'v_16358471','aaa','asadasdad','xcfjB16','../../../static/img/user2.png'),
+(7,'v_22693476','17611580721','123456','xcfjC16','../../../static/img/user2.png'),
+(8,'v_29311236','15776573881','123456','xcfjB16','http://127.0.0.1:4000/upload/1520905918217.jpg'),
+(9,NULL,NULL,NULL,NULL,'\'../../../static/img/user2.png\'');
 
 /*Table structure for table `patientgroup` */
 
@@ -181,14 +161,14 @@ CREATE TABLE `patientgroup` (
   `fromLoginUser` varchar(20) DEFAULT NULL,
   `sex` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 /*Data for the table `patientgroup` */
 
 insert  into `patientgroup`(`id`,`age`,`height`,`weight`,`profession`,`history`,`name`,`fromLoginUser`,`sex`) values 
 (5,23,'175cm','101kg','IT程序员','胃病','张三','17611580721','1'),
 (23,12,'170cm','120kg','患者','脑梗塞','李四','17611580721','0'),
-(24,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+(25,23,'175cm','101kg','IT程序员','无','赵帅','15776573881','1');
 
 /*Table structure for table `record` */
 
@@ -202,21 +182,17 @@ CREATE TABLE `record` (
   `receiver` varchar(50) DEFAULT NULL,
   `send` varchar(50) DEFAULT NULL,
   `state` varchar(10) DEFAULT 'false',
+  `face` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 /*Data for the table `record` */
 
-insert  into `record`(`id`,`record_group_id`,`content`,`time`,`receiver`,`send`,`state`) values 
-(1,'1519884680877','789','2018-03-01 10:44:41','zhansan19950721','17611580721','false'),
-(2,'1519884680877','789789789789879','2018-03-01 14:16:07','zhansan19950721','17611580721','false'),
-(3,'1519884680877','123','2018-03-01 14:21:46','zhansan19950721','17611580721','false'),
-(4,'1519884680877','2134456789','2018-03-01 14:22:55','zhansan19950721','17611580721','false'),
-(5,'1519884680877','tyyyyyyyyytrtyry','2018-03-01 14:23:34','zhansan19950721','17611580721','false'),
-(6,'1519955215665','123','2018-03-02 09:47:29','zhansan19950721','17611580721','false'),
-(7,'1519955215665','qwe','2018-03-02 10:52:14','zhansan19950721','17611580721','false'),
-(8,'1520212097421','111','2018-03-05 09:09:16','zhansan19950721','17611580721','false'),
-(9,'1520229967469','123','2018-03-05 14:07:05','zhansan19950721','17611580721','false');
+insert  into `record`(`id`,`record_group_id`,`content`,`time`,`receiver`,`send`,`state`,`face`) values 
+(60,'1520820325543','啊啊啊','2018-03-12 17:05:33','13889898937','15776573881','true','http%3A//127.0.0.1%3A4000/upload/1520329969332.jpg'),
+(61,'1520820325543','哈哈哈','2018-03-12 17:13:55','13889898937','15776573881','true','http%3A//127.0.0.1%3A4000/upload/1520329969332.jpg'),
+(63,'1520820325543','嗯嗯','2018-03-12 17:14:48','15776573881','13889898937','true','../../../static/img/doctor.jpg'),
+(64,'1520820325543','我知道了','2018-03-12 17:14:55','15776573881','13889898937','true','../../../static/img/doctor.jpg');
 
 /*Table structure for table `record_group` */
 
@@ -235,16 +211,34 @@ CREATE TABLE `record_group` (
 /*Data for the table `record_group` */
 
 insert  into `record_group`(`id`,`d_id`,`p_id`,`time`,`chatState`,`chatPerson`) values 
-('1','zhansan19950721','17611580721','2018-03-01 10:48:46','0','23'),
-('1519883777640','17611580721','zhansan19950721','2018-03-01 10:44:41','23','0'),
-('1519884258323','zhansan19950721','17611580721','2018-03-01 14:04:18','1','5'),
-('1519884341561','zhansan19950721','17611580721','2018-03-01 14:05:41','1','5'),
-('1519884680877','zhansan19950721','17611580721','2018-03-01 14:11:20','1','23'),
-('1519955215665','zhansan19950721','17611580721','2018-03-02 09:46:55','1','5'),
-('1520212097421','zhansan19950721','17611580721','2018-03-05 09:08:17','1','5'),
-('1520229967469','zhansan19950721','17611580721','2018-03-05 14:06:07','1','5'),
-('1520230039303','zhansan19950721','17611580721','2018-03-05 14:07:19','1','5'),
-('2','zhansan19950721','17611580721','2018-03-01 10:50:55','1','5');
+('1520667357319','15776573882','17611580721','2018-03-10 15:35:57','1','5'),
+('1520820325543','13889898937','15776573881','2018-03-12 10:05:25','1','25');
+
+/*Table structure for table `sq_order` */
+
+DROP TABLE IF EXISTS `sq_order`;
+
+CREATE TABLE `sq_order` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `d_id` varchar(50) DEFAULT NULL,
+  `order_name` varchar(20) DEFAULT NULL,
+  `order_phone` varchar(20) DEFAULT NULL,
+  `order_address` varchar(50) DEFAULT NULL,
+  `order_time` varchar(50) DEFAULT NULL,
+  `order_situation` varchar(20) DEFAULT NULL,
+  `order_state` varchar(10) DEFAULT 'false',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+/*Data for the table `sq_order` */
+
+insert  into `sq_order`(`id`,`d_id`,`order_name`,`order_phone`,`order_address`,`order_time`,`order_situation`,`order_state`) values 
+(1,'d_id','order_name','order_phone','order_address','order_time','order_situation','false'),
+(2,'zhansan19950721','张三','17978788787','朝阳小区2单元一楼','2018-03-27 11:59:34','true','false'),
+(3,'zhansan19950721','张三','17978788787','朝阳小区2单元一楼','2018-03-27 11:59:34','true','false'),
+(4,'zhansan19950721','lisi','17611580721','adasdas','2018-03-13 13:30:51','true','false'),
+(5,'wangwu19950721','张三','17611580721','朝阳小区10单元一楼','2018-03-13 13:30:51','true','true'),
+(6,'13889898937','赵帅','18741623110','朝阳区','2018-03-12 17:23:41','true','true');
 
 /*Table structure for table `toutiao` */
 
@@ -252,20 +246,21 @@ DROP TABLE IF EXISTS `toutiao`;
 
 CREATE TABLE `toutiao` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `img` varchar(255) DEFAULT NULL,
   `title` varchar(50) DEFAULT NULL,
   `abstract` text DEFAULT NULL,
   `see_num` int(10) DEFAULT NULL,
   `time` varchar(20) DEFAULT NULL,
   `content` text DEFAULT NULL,
-  `img` text DEFAULT NULL,
   `from` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Data for the table `toutiao` */
 
-insert  into `toutiao`(`id`,`title`,`abstract`,`see_num`,`time`,`content`,`img`,`from`) values 
-(1,'春节后如何养生？饮食心理齐调理 ','喜庆团圆的春节七天假期很快过去了，很多朋友难以一下恢复正常状态。该如何帮助大家快速调整好正常的生活工作状态呢，下面大家跟着小固一起学习春节后如何养生吧！',0,'2018-02-26','<img src=\"../../../static/img/healthy1.jpg\" />\r\n<p>喜庆团圆的春节七天假期很快过去了，很多朋友难以一下恢复正常状态。该如何帮助大家快速调整好正常的生活工作状态呢，下面大家跟着小固一起学习春节后如何养生吧！</p>\r\n<img src=\"../../../static/img/healthy2.jpg\" />\r\n<p>我国古代名医孙思邈说过：“春日宜省酸增甘，以养脾气。”意思是说，春季宜少吃酸的，多吃甜的。中医认为春季为肝气旺盛之时，多食酸味食品会使肝气过盛而损害脾胃，所以应少食酸味食品，宜吃甜味食品，以健脾胃之气。红枣正是这样一味春季养脾佳品，既可生吃，亦可做枣粥、枣糕，以及枣米饭。</p>','../../../static/img/healthy1.jpg','admin');
+insert  into `toutiao`(`id`,`img`,`title`,`abstract`,`see_num`,`time`,`content`,`from`) values 
+(1,'../../../static/img/healthy_img.jpg','春节后如何养生？饮食心理齐调理 ','喜庆团圆的春节七天假期很快过去了，很多朋友难以一下恢复正常状态。该如何帮助大家快速调整好正常的生活工作状态呢，下面大家跟着小固一起学习春节后如何养生吧！',0,'2018-02-26','<img src=\"../../../static/img/healthy1.jpg\" />\r\n<p>喜庆团圆的春节七天假期很快过去了，很多朋友难以一下恢复正常状态。该如何帮助大家快速调整好正常的生活工作状态呢，下面大家跟着小固一起学习春节后如何养生吧！</p>\r\n<img src=\"../../../static/img/healthy2.jpg\" />\r\n<p>我国古代名医孙思邈说过：“春日宜省酸增甘，以养脾气。”意思是说，春季宜少吃酸的，多吃甜的。中医认为春季为肝气旺盛之时，多食酸味食品会使肝气过盛而损害脾胃，所以应少食酸味食品，宜吃甜味食品，以健脾胃之气。红枣正是这样一味春季养脾佳品，既可生吃，亦可做枣粥、枣糕，以及枣米饭。</p>','admin'),
+(2,'../../../static/img/healthy_img.jpg','春节后如何养生？','喜庆团圆的春节七天假期很快过去了，很多朋友难以一下恢复正常状态。该如何帮助大家快速调整好正常的生活工作状态呢，下面大家跟着小固一起学习春节后如何养生吧！hahhahahahhahahaaa',0,'2018-02-26',NULL,'admin');
 
 /*Table structure for table `zhishi` */
 
@@ -273,7 +268,7 @@ DROP TABLE IF EXISTS `zhishi`;
 
 CREATE TABLE `zhishi` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `img` text DEFAULT NULL,
+  `img` varchar(255) DEFAULT NULL,
   `title` varchar(20) DEFAULT NULL,
   `abstract` text DEFAULT NULL,
   `see_num` int(10) DEFAULT NULL,
@@ -281,9 +276,13 @@ CREATE TABLE `zhishi` (
   `content` text DEFAULT NULL,
   `from` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `zhishi` */
+
+insert  into `zhishi`(`id`,`img`,`title`,`abstract`,`see_num`,`time`,`content`,`from`) values 
+(1,'../../../static/img/healthy_img.jpg','春节好啊啊养生','请问请问群二无群翁群翁群群翁无群二春',123,'2018-03-05','123123123车的行为分析如风达非常顺畅辅导费挨个','111'),
+(2,NULL,NULL,NULL,123,'2018-03-06',NULL,'');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -37,6 +37,31 @@ router.route('/selectToutiao').get(function (req, res) {
         })
     })
 })
+router.route('/selectZhishi').get(function (req, res) {
+    
+    let sql =  `select * from zhishi `;
+   
+    //param = [offset,limit];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql
+        //values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log({messsage: 'ERROR'})
+            return
+        }else{
+            res.send(data);
+        }
+        
+        })
+    })
+})
 
 //文章详情
 router.route('/article').post(function (req, res) {
