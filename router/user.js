@@ -49,9 +49,12 @@ router.route('/login').post(function (req, res) {
     if(req.body.loginState == 1){
         sql =  `select p_name,p_tel,p_face face from patient where p_tel = ? and p_password = ?`;
         console.log(1)
-    }else{
+    }else if(req.body.loginState == 2){
         sql =  `select d_name,d_tel,d_face face from doctor where d_tel = ? and d_password = ?`;
         console.log(2)
+    }else if(req.body.loginState == 3){
+        sql =  `select * from admin where a_user = ? and a_password = ?`;
+        console.log(3)
     }
     //console.log(name)
     param = [req.body.p_tel,req.body.p_password];
