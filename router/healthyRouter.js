@@ -65,51 +65,29 @@ router.route('/selectZhishi').get(function (req, res) {
 
 //文章详情
 router.route('/article').post(function (req, res) {
-    if(req.body.type == '1'){
-        let sql =  `select * from toutiao where id = ?`;
-        param = [req.body.id];
-        mysql.pool.getConnection(function (error, connection) {
-            if (error) {
-            console.log({message: '连接数据库失败'})
+   //console.log(req.body)
+    let sql =  `select * from toutiao where n_id = ?`;
+    param = [req.body.id];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log({messsage: 'ERROR'})
             return
-            }
-            connection.query({
-            sql: sql,
-            values: param
-            }, function (error, data) {
-            connection.release()
-            if (error) {
-                console.log({messsage: 'ERROR'})
-                return
-            }else{
-                res.send(data);
-            }
-            
-            })
+        }else{
+            res.send(data);
+        }
+        
         })
-    }else if(req.body.type == '2'){
-        let sql =  `select * from zhishi where id = ? `;
-        param = [req.body.id];
-        mysql.pool.getConnection(function (error, connection) {
-            if (error) {
-            console.log({message: '连接数据库失败'})
-            return
-            }
-            connection.query({
-            sql: sql,
-            values: param
-            }, function (error, data) {
-            connection.release()
-            if (error) {
-                console.log({messsage: 'ERROR'})
-                return
-            }else{
-                res.send(data);
-            }
-            
-            })
-        })
-    }
+    })
+    
    
 })
 //常用电话
@@ -133,6 +111,33 @@ router.route('/common_phone').get(function (req, res) {
             return
         }else{
             res.send(data);
+        }
+        
+        })
+    })
+})
+//更新浏览次数
+router.route('/updateSeeNum').post(function (req, res) {
+    
+    let sql =  `UPDATE toutiao SET n_see_num = n_see_num+1 WHERE n_id=?`;
+   
+    param = [req.body.id];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log({messsage: 'ERROR'})
+            return
+        }else{
+            res.send({messsage: 'OK'});
+            //console.log({messsage: 'OK'})
         }
         
         })

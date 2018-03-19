@@ -314,7 +314,7 @@ router.route('/getAllOrder').post(function (req, res) {
             res.send({message: 'ERROR'});
             return
         }else{
-            console.log(data)
+           // console.log(data)
             res.send(data);
         }
         

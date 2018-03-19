@@ -182,6 +182,7 @@ router.route('/getThePhone').post(function (req, res) {
 })
 
 router.route('/showToutiaoList').post(function (req, res) {
+    //console.log(req.body)
     let sql;
     if(req.body.n_type == 'toutiao'){
         sql =  `SELECT 	* FROM toutiao where n_type = 'toutiao' LIMIT ?, ?`;
@@ -193,7 +194,7 @@ router.route('/showToutiaoList').post(function (req, res) {
     
     
     //console.log(name)
-    param = [parseInt(req.body.pageNum)-1,parseInt(req.body.pageSize)];
+    param = [(parseInt(req.body.pageNum)-1)*parseInt(req.body.pageSize),parseInt(req.body.pageSize)];
     mysql.pool.getConnection(function (error, connection) {
         if (error) {
         console.log({message: '连接数据库失败'})
@@ -210,6 +211,7 @@ router.route('/showToutiaoList').post(function (req, res) {
         }else{
             
             if(data.length>0){
+                //console.log(data)
                 res.send(data);
             }else{
                 res.send({message: 'ERROR'});
