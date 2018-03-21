@@ -147,6 +147,7 @@ router.route('/getTheAddress').post(function (req, res) {
     
 })
 router.route('/getThePhone').post(function (req, res) {
+   
     let sql;
    
     sql =  `select * from common_phone where id=?`;
@@ -231,7 +232,7 @@ router.route('/showDoctorList').post(function (req, res) {
     sql =  `SELECT 	* FROM doctor  LIMIT ?, ?`;
     
     //console.log(name)
-    param = [parseInt(req.body.pageNum)-1,parseInt(req.body.pageSize)];
+    param = [(parseInt(req.body.pageNum)-1)*parseInt(req.body.pageSize),parseInt(req.body.pageSize)];
     mysql.pool.getConnection(function (error, connection) {
         if (error) {
         console.log({message: '连接数据库失败'})
@@ -337,13 +338,53 @@ router.route('/showDoctorNum').post(function (req, res) {
     })
     
 })
+
+router.route('/showToutiaoNum').post(function (req, res) {
+    let sql;
+    if(req.body.n_type == "toutiao"){
+        sql =  `SELECT 	count(*) count FROM toutiao where n_type="toutiao" `;
+    }else if(req.body.n_type == "zhishi"){
+        sql =  `SELECT 	count(*) count FROM toutiao where n_type="zhishi" `;
+    }
+    
+    
+    //console.log(name)
+    //param = [parseInt(req.body.pageNum)-1,parseInt(req.body.pageSize)];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql
+        //values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            
+            if(data.length>0){
+                res.send(data);
+            }else{
+                res.send({message: 'ERROR'});
+            }
+            //console.log(data)
+            
+        }
+        
+        })
+    })
+    
+})
 router.route('/saveArticle').post(function (req, res) {
     let sql;
     
-    sql =  `insert into toutiao(n_img,n_title,n_abstract,n_see_num,n_time,n_content,n_from,n_type) values (?,?,?,?,?,?,?,?)`;
+    sql =  `insert into toutiao(n_img,n_title,n_abstract,n_time,n_content,n_from,n_type) values (?,?,?,?,?,?,?)`;
 
     //console.log(name)
-    param = [req.body.n_img,req.body.n_title,req.body.n_abstract,req.body.n_see_num,req.body.n_time,req.body.n_content,req.body.n_from,req.body.n_type];
+    param = [req.body.n_img,req.body.n_title,req.body.n_abstract,req.body.n_time,req.body.n_content,req.body.n_from,req.body.n_type];
     mysql.pool.getConnection(function (error, connection) {
         if (error) {
         console.log({message: '连接数据库失败'})
@@ -446,7 +487,7 @@ router.route('/deleteToutiaoAll').post(function (req, res) {
     
 })
 router.route('/delAllPhone').post(function (req, res) {
-    //console.log(req.body)
+    console.log(req.body)
     var sql =  `delete from common_phone where id in (`;//用来拼接？
     param = [];
     for(let i = 0;i<req.body.ids.length;i++){  //循环传过来的id数组，插入到param变量数组中
@@ -467,8 +508,8 @@ router.route('/delAllPhone').post(function (req, res) {
         return
         }
         connection.query({
-        sql: sql
-        //values: param
+        sql: sql,
+        values: param
         }, function (error, data) {
         connection.release()
         if (error) {
@@ -488,8 +529,8 @@ router.route('/delAllPhone').post(function (req, res) {
     
 })
 router.route('/deleteDoctorAll').post(function (req, res) {
-    //console.log(req.body)
-    var sql =  `delete from doctor where d_id in (`;//用来拼接？
+    console.log(req.body)
+    var sql =  `delete from doctor where id in (`;//用来拼接？
     param = [];
     for(let i = 0;i<req.body.ids.length;i++){  //循环传过来的id数组，插入到param变量数组中
         param.push(req.body.ids[i])
@@ -509,8 +550,8 @@ router.route('/deleteDoctorAll').post(function (req, res) {
         return
         }
         connection.query({
-        sql: sql
-        //values: param
+        sql: sql,
+        values: param
         }, function (error, data) {
         connection.release()
         if (error) {
@@ -758,7 +799,7 @@ router.route('/updateNews').post(function (req, res) {
 })
 router.route('/updateAddress').post(function (req, res) {
     //console.log(req.body)
-    var sql =  `UPDATE address SET d_id=?,d_name=(SELECT d_name FROM doctor WHERE d_id = ?) WHERE id = '1'`;
+    var sql =  `UPDATE address SET d_id=?,d_name=(SELECT d_name FROM doctor WHERE d_id = ?) WHERE id = ?`;
     
 
     //console.log(name)

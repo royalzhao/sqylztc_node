@@ -143,4 +143,31 @@ router.route('/updateSeeNum').post(function (req, res) {
         })
     })
 })
+//更新医生服务患者次数
+router.route('/updatePatientNum').post(function (req, res) {
+    //console.log(req.body)
+    let sql =  `UPDATE doctor SET d_patientNum = d_patientNum+1 WHERE d_tel=?`;
+   
+    param = [req.body.d_id];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log({messsage: 'ERROR'})
+            return
+        }else{
+            res.send({messsage: 'OK'});
+            //console.log({messsage: 'OK'})
+        }
+        
+        })
+    })
+})
 module.exports = router

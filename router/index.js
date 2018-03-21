@@ -16,10 +16,11 @@ router.route('/getDoctorInfo').post(function (req, res) {
     let sql;
     if(req.body.userType == '2'){
         sql =  `select * from doctor where d_tel=?`;
-        //console.log(1)
+        console.log(1)
     }else{
+        console.log(req.body.username)
         sql =  `SELECT * FROM doctor  JOIN patient ON doctor.p_houseNum=patient.p_houseNum  WHERE p_tel=?`;
-        //console.log(2)
+        console.log(2)
     }
     
     
@@ -38,6 +39,7 @@ router.route('/getDoctorInfo').post(function (req, res) {
             res.send({message: 'ERROR'});
             return
         }else{
+            console.log(data)
             res.send(data);
         }
         
@@ -135,7 +137,7 @@ router.route('/getUserInfo').post(function (req, res) {
 router.route('/search').post(function (req, res) {
     //console.log(req.body)
     let sql;
-    sql =  `SELECT * FROM toutiao WHERE title OR abstract LIKE "%"?"%" UNION SELECT * FROM zhishi WHERE title OR abstract LIKE "%"?"%" `;
+    sql =  `SELECT * FROM toutiao WHERE n_title LIKE "%"?"%" OR n_abstract LIKE "%"?"%" `;
     
     param = [req.body.searchValue,req.body.searchValue];
     mysql.pool.getConnection(function (error, connection) {
