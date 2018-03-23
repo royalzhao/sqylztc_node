@@ -15,7 +15,7 @@ const router = express.Router();
 router.route('/patientCount').post(function (req, res) {
     let sql;
    
-    sql =  `SELECT address.label,COUNT(1) count FROM ( SELECT p_houseNum FROM patient  GROUP BY id) a  JOIN address ON address.value = a.p_houseNum GROUP BY p_houseNum`;
+    sql =  `SELECT address.label,COUNT(1) count FROM ( SELECT p_houseNum FROM patient  GROUP BY id) a  JOIN address ON address.value = a.p_houseNum GROUP BY p_houseNum,address.label`;
     
     //console.log(name)
     //param = [req.body.p_tel,req.body.p_password];

@@ -85,6 +85,79 @@ router.route('/login').post(function (req, res) {
     })
     
 })
+router.route('/forgetPass').post(function (req, res) {
+    let sql;
+    if(req.body.updateState == '1'){
+        sql =  `update patient set p_password=? where p_tel=?`;
+        //console.log(1)
+    }else if(req.body.updateState == '2'){
+        sql =  `update doctor set d_password=? where d_tel=?`;
+        //console.log(2)
+    }
+    //console.log(name)
+    param = [req.body.p_password,req.body.p_tel];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send({message: 'OK'});
+            
+        }
+        
+        })
+    })
+    
+})
+router.route('/checkForget').post(function (req, res) {
+    let sql;
+    if(req.body.updateState == '1'){
+        sql =  `select * from patient where p_tel = ?`;
+        //console.log(1)
+    }else if(req.body.updateState == '2'){
+        sql =  `select * from doctor where d_tel = ?`;
+        //console.log(2)
+    }
+    //console.log(name)
+    param = [req.body.p_tel];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            //console.log({message: 'ERROR'})
+            return
+        }else{
+           // console.log(data.length)
+            if(data.length > 0){
+               // console.log(data)
+                res.send({message: 'OK'});
+            }else{
+                res.send({message: 'ERROR'});
+            }
+            
+        }
+        
+        })
+    })
+    
+})
 router.route('/getAddress').get(function (req, res) {
     let sql;
     sql =  `select value,label from address`;
@@ -105,6 +178,37 @@ router.route('/getAddress').get(function (req, res) {
             return
         }else{
             res.send(data);
+        }
+        
+        })
+    })
+    
+})
+router.route('/check').post(function (req, res) {
+    let sql;
+    sql =  `select * from patient where p_tel = ?`;
+    
+    param = [req.body.p_tel];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            if(data.length>0){
+                res.send({message: 'OK'});
+            }else{
+                res.send({message: 'ERROR'});
+            }
+            
         }
         
         })
