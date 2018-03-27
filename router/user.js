@@ -203,10 +203,12 @@ router.route('/check').post(function (req, res) {
             res.send({message: 'ERROR'});
             return
         }else{
+            console.log(data)
+            console.log(data.length)
             if(data.length>0){
-                res.send({message: 'OK'});
-            }else{
                 res.send({message: 'ERROR'});
+            }else{
+                res.send({message: 'OK'});
             }
             
         }

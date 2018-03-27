@@ -266,7 +266,7 @@ router.route('/getState').post(function (req, res) {
     })
     
 })
-
+//删除聊天记录
 router.route('/delChatRecord').post(function (req, res) {
     
     let sql;
@@ -300,6 +300,36 @@ router.route('/delChatRecord').post(function (req, res) {
     })
     
 })
+//查询病人简要信息
+router.route('/getPatientInfo').post(function (req, res) {
+    
+    let sql;
+    sql =  `SELECT patientgroup.* ,record_group.chatState FROM patientgroup JOIN record_group ON patientgroup.id=record_group.chatPerson WHERE record_group.id=?`;
+    
+    param = [req.body.record_group_id];
+    mysql.pool.getConnection(function (error, connection) {
+        if (error) {
+        console.log({message: '连接数据库失败'})
+        return
+        }
+        connection.query({
+        sql: sql,
+        values: param
+        }, function (error, data) {
+        connection.release()
+        if (error) {
+            console.log({message: '接口getPatientInfo--------sql_ERROR'})
+            res.send({message: 'ERROR'});
+            return
+        }else{
+            res.send(data);
+        }
+        
+        })
+    })
+    
+})
+//更改消息浏览状态为true
 router.route('/changeState').post(function (req, res) {
     
     let sql =  `UPDATE record SET state='true' WHERE record_group_id=? and receiver=?`;

@@ -37,12 +37,12 @@ app.post('/upload', upload.single('avatar'), function(req, res, next) {   //avat
     res.send({
         err: null,
         //filePath:就是图片在项目中的存放路径
-        filePath: 'http://127.0.0.1:4000/upload/' + path.basename(req.file.path)
+        filePath: 'http://www.spn365.cn:4000/upload/' + path.basename(req.file.path)
     });
     console.log({
         err: null,
         //filePath:就是图片在项目中的存放路径
-        filePath: 'http://127.0.0.1:4000/upload/' + path.basename(req.file.path)
+        filePath: 'http://www.spn365.cn:4000/upload/' + path.basename(req.file.path)
     })
 });
 
